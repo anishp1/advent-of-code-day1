@@ -24,13 +24,13 @@ fn part2(input_file: &str) {
 
 
 fn find_first(line: &str) -> char {
-    let mut current_word: Vec<char> = Vec::new();
+    let mut current_word: String = String::from("");
     for (_i, c) in line.chars().enumerate() {
         if c.is_digit(10) {
             return c;
         } else {
             current_word.push(c);
-            let result = match_word(&mut current_word);
+            let result = match_word(&current_word);
             if result != 'n' {
                 return result;
             }
@@ -40,13 +40,13 @@ fn find_first(line: &str) -> char {
 }
 
 fn find_last(line: &str) -> char {
-    let mut current_word: Vec<char> = Vec::new();
+    let mut current_word: String = String::from("");
     for (_i, c) in line.chars().rev().enumerate() {
         if c.is_digit(10) {
             return c;
         } else {
             current_word.insert(0, c);
-            let result = match_word(&mut current_word);
+            let result = match_word(&current_word);
             if result != 'n' {
                 return result;
             }
@@ -55,8 +55,7 @@ fn find_last(line: &str) -> char {
     return 'n';
 }
 
-fn match_word(current_word: &mut Vec<char>) -> char {
-    let word: String = current_word.iter().collect();
+fn match_word(word: &String) -> char {
     if word.contains("zero") {
         return '0';
     } else if word.contains("one") {
