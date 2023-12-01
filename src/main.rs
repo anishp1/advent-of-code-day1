@@ -5,48 +5,54 @@ fn main() {
 
 fn part2(input_file: &str) {
     let mut sum = 0;
-
     for line in input_file.lines() {
-        let mut string_list: [char; 2] = ['0', '0'];
-        let mut current_word: Vec<char> = Vec::new();
-        for (_i, c) in line.chars().enumerate() {
-            if c.is_digit(10) {
-                string_list[0] = c;
-                break;
-            } else {
-                current_word.push(c);
-                let result = match_word(&mut current_word);
-                if result != 'n' {
-                    string_list[0] = result;
-                    current_word.clear();
-                    break;
-                }
+        let mut valid_string: String = String::from("");
+        let first = find_first(line);
+        if first != 'n' {
+            valid_string.push(first);
+            let last = find_last(line);
+            if last != 'n' {
+                valid_string.push(last);
+                let result = valid_string.parse::<i32>().unwrap();
+                sum += result;
             }
-        }
-        current_word.clear();
-        for (_i, c) in line.chars().rev().enumerate() {
-            if c.is_digit(10) {
-                string_list[1] = c;
-                break;
-            } else {
-                current_word.insert(0, c);
-                let result = match_word(&mut current_word);
-                if result != 'n' {
-                    string_list[1] = result;
-                    current_word.clear();
-                    break;
-                }
-            }
-        }
-        if string_list.len() >= 1 {
-            let valid_string: String = string_list.iter().collect();
-            let result = valid_string.parse::<i32>().unwrap();
-            println!("{}", result);
-
-            sum += result;
         }
     }
     println!("Sum={}", sum);
+}
+
+
+
+fn find_first(line: &str) -> char {
+    let mut current_word: Vec<char> = Vec::new();
+    for (_i, c) in line.chars().enumerate() {
+        if c.is_digit(10) {
+            return c;
+        } else {
+            current_word.push(c);
+            let result = match_word(&mut current_word);
+            if result != 'n' {
+                return result;
+            }
+        }
+    }
+    return 'n'
+}
+
+fn find_last(line: &str) -> char {
+    let mut current_word: Vec<char> = Vec::new();
+    for (_i, c) in line.chars().rev().enumerate() {
+        if c.is_digit(10) {
+            return c;
+        } else {
+            current_word.insert(0, c);
+            let result = match_word(&mut current_word);
+            if result != 'n' {
+                return result;
+            }
+        }
+    }
+    return 'n';
 }
 
 fn match_word(current_word: &mut Vec<char>) -> char {
@@ -100,8 +106,6 @@ fn part1(input_file: &str) {
         }
 
         let result = digit_string.parse::<i32>().unwrap();
-
-        println!("{}", result);
 
         sum += result;
     }
